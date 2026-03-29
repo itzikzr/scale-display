@@ -217,6 +217,7 @@ class WeightScreen(Screen):
             size_hint_y=None,
             height=dp(100),
             halign='center',
+            base_direction='ltr',
         )
         self.lbl_weight.bind(size=lambda *a: setattr(self.lbl_weight, 'text_size',
                                                       (self.lbl_weight.width, None)))
@@ -240,7 +241,7 @@ class WeightScreen(Screen):
         btn_grid = GridLayout(cols=1, spacing=dp(10), size_hint=(1, None))
         btn_grid.bind(minimum_height=btn_grid.setter('height'))
 
-        self.btn_get = make_btn('קבל משקל', C_BLUE, self._on_get)
+        self.btn_get = make_btn('משקל', C_BLUE, self._on_get)
         btn_grid.add_widget(self.btn_get)
 
         row2 = BoxLayout(orientation='horizontal', spacing=dp(10),
@@ -318,7 +319,7 @@ class WeightScreen(Screen):
             self._auto_event = None
 
     def _set_btn_normal(self):
-        self.btn_get.text = 'קבל משקל'
+        self.btn_get.text = 'משקל'
         self.btn_get.background_color = C_BLUE
         self.btn_get.disabled = False
 
@@ -480,7 +481,7 @@ class SettingsScreen(Screen):
 # ─── App ──────────────────────────────────────────────────────────────────────
 class ScaleApp(App):
     def build(self):
-        self.title = 'תצוגת משקל'
+        self.title = 'Shekel Weight Display'
 
         sm = ScreenManager(transition=NoTransition())
         sm.add_widget(WeightScreen(name='weight'))
