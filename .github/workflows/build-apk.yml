@@ -40,7 +40,7 @@ jobs:
           restore-keys: buildozer-
 
       - name: Build APK
-        run: buildozer android debug 2>&1 | tail -100
+        run: buildozer android debug
 
       - name: Find APK
         run: find . -name "*.apk" 2>/dev/null || echo "No APK found"
