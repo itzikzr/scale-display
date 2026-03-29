@@ -6,7 +6,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json
 version = 1.1
 
-requirements = python3,kivy==2.3.0,openpyxl
+requirements = python3,kivy==2.3.0,openpyxl,et_xmlfile
 
 icon.filename = %(source.dir)s/logo.jpg
 
