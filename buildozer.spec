@@ -4,10 +4,11 @@ package.name = scaledisplay
 package.domain = org.scaledisplay
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json
-version = 1.0
-icon.filename = %(source.dir)s/logo.jpg
+version = 1.1
 
-requirements = python3,kivy==2.3.0
+requirements = python3,kivy==2.3.0,openpyxl
+
+icon.filename = %(source.dir)s/logo.jpg
 
 orientation = portrait
 fullscreen = 0
