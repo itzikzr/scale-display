@@ -34,6 +34,7 @@ from kivy.uix.label import Label
 from kivy.uix.screenmanager import NoTransition, Screen, ScreenManager
 from kivy.uix.textinput import TextInput
 from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivy.utils import get_color_from_hex as hex_c
 from kivy.graphics import Color, Rectangle
@@ -73,11 +74,8 @@ def load_cfg():
         return dict(DEFAULT_CFG)
 
 def save_cfg(cfg):
-    try:
-        with open(cfg_path(), 'w') as f:
-            json.dump(cfg, f)
-    except Exception:
-        pass
+    with open(cfg_path(), 'w') as f:
+        json.dump(cfg, f)
 
 # ── TCP ───────────────────────────────────────────────────────────────────────
 def scale_cmd(ip, port, cmd, timeout=5):
@@ -228,6 +226,16 @@ class WeightScreen(Screen):
 
     def _build_ui(self):
         root = BoxLayout(orientation='vertical', padding=dp(16), spacing=dp(12))
+
+        # Logo
+        logo = Image(
+            source='logo.jpg',
+            size_hint=(1, None),
+            height=dp(120),
+            allow_stretch=True,
+            keep_ratio=True,
+        )
+        root.add_widget(logo)
 
         # Dark card background
         card = BgBox(C_DARK, orientation='vertical',
@@ -465,8 +473,11 @@ class SettingsScreen(Screen):
             self._result('Invalid interval', hex_c('#ef4444'))
             return
         mode = 'auto' if self.btn_auto.state == 'down' else 'manual'
-        save_cfg({'ip': ip, 'port': port, 'mode': mode, 'interval': interval})
-        self._result('Saved!', hex_c('#22c55e'))
+        try:
+            save_cfg({'ip': ip, 'port': port, 'mode': mode, 'interval': interval})
+            self._result('Saved!', hex_c('#22c55e'))
+        except Exception as e:
+            self._result('Save error: ' + str(e)[:30], hex_c('#ef4444'))
 
     def _test(self, *_):
         self._result('Testing...', hex_c('#60a5fa'))
