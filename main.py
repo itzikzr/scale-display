@@ -504,8 +504,8 @@ class SettingsScreen(Screen):
         mode = 'auto' if self.btn_auto.state == 'down' else 'manual'
         try:
             save_cfg({'ip': ip, 'port': port, 'mode': mode, 'interval': interval})
-            # Navigate back to weight screen
-            self.manager.current = 'weight'
+            # Navigate back to weight screen and update navbar
+            App.get_running_app().nav._go('weight')
         except Exception as e:
             self._result('Save error: ' + str(e)[:30], hex_c('#ef4444'))
 
@@ -544,9 +544,9 @@ class ScaleApp(App):
         sm.add_widget(WeightScreen(name='weight'))
         sm.add_widget(SettingsScreen(name='settings'))
 
-        nav = NavBar(sm)
+        self.nav = NavBar(sm)
         root = BoxLayout(orientation='vertical')
-        root.add_widget(nav)
+        root.add_widget(self.nav)
         root.add_widget(sm)
         return root
 
