@@ -5,6 +5,7 @@ package.domain = org.scaledisplay
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json
 version = 1.0
+icon.filename = %(source.dir)s/logo.jpg
 
 requirements = python3,kivy==2.3.0
 
