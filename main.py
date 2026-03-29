@@ -213,7 +213,6 @@ class WeightScreen(Screen):
             font_size=sp(72),
             bold=True,
             color=C_CYAN,
-            font_name='RobotoMono',
             size_hint_y=None,
             height=dp(100),
             halign='center',
