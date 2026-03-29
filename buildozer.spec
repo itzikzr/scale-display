@@ -1,12 +1,12 @@
 [app]
-title = תצוגת משקל
+title = Shekel Weight Display
 package.name = scaledisplay
 package.domain = org.scaledisplay
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json
 version = 1.0
 
-requirements = python3,kivy==2.3.0,kivymd
+requirements = python3,kivy==2.3.0
 
 orientation = portrait
 fullscreen = 0
