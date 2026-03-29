@@ -40,11 +40,17 @@ jobs:
           restore-keys: buildozer-
 
       - name: Build APK
-        run: buildozer android debug 2>&1 | tail -50
+        run: buildozer android debug 2>&1 | tail -100
+
+      - name: Find APK
+        run: find . -name "*.apk" 2>/dev/null || echo "No APK found"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ScaleDisplay-APK
-          path: bin/*.apk
+          path: |
+            bin/*.apk
+            .buildozer/**/*.apk
+          if-no-files-found: warn
           retention-days: 30
