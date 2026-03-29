@@ -5,6 +5,7 @@ import json
 import socket
 import threading
 import time
+import datetime
 import traceback
 
 
@@ -50,7 +51,7 @@ C_CYAN   = hex_c('#38bdf8')
 C_TEXT   = hex_c('#1e293b')
 C_MUTED  = hex_c('#64748b')
 C_WHITE  = hex_c('#ffffff')
-C_LIGHT  = hex_c('#f0f4f8')
+C_LIGHT  = hex_c('#ffffff')
 
 # ── Config ────────────────────────────────────────────────────────────────────
 DEFAULT_CFG = {
@@ -103,6 +104,21 @@ def scale_cmd(ip, port, cmd, timeout=5):
         except Exception:
             pass
         return 'ok'
+
+# ── Weight parsing ────────────────────────────────────────────────────────────
+def now_str():
+    return datetime.datetime.now().strftime('%d/%m/%Y  %H:%M:%S')
+
+def parse_weight(raw):
+    """Return (display_text, kind)  kind = 'normal' | 'over' | 'under' | 'nocomm'"""
+    v = raw.strip().upper()
+    if not v:
+        return 'No Comm', 'nocomm'
+    if v == 'H' or v == 'STOP':
+        return 'OVER', 'over'
+    if v == 'U' or v == 'UNDER' or v == 'UNDRE':
+        return 'UNDER', 'under'
+    return raw.strip(), 'normal'
 
 # ── UI helpers ────────────────────────────────────────────────────────────────
 class BgWidget(Widget):
@@ -303,16 +319,15 @@ class WeightScreen(Screen):
         if self._busy:
             return
         self._busy = True
-        Clock.schedule_once(lambda *_: self._set_status('Connecting...', hex_c('#60a5fa')))
         try:
             cfg = load_cfg()
             val = scale_cmd(cfg['ip'], cfg['port'], 'W')
-            Clock.schedule_once(lambda *_: self._set_weight(val))
-            Clock.schedule_once(lambda *_: self._set_status('Updated', hex_c('#86efac')))
-        except Exception as e:
-            msg = str(e)[:40]
-            Clock.schedule_once(lambda *_: self._set_weight_err())
-            Clock.schedule_once(lambda *_: self._set_status(msg, hex_c('#fca5a5')))
+            display, kind = parse_weight(val)
+            ts = now_str()
+            Clock.schedule_once(lambda *_, d=display, k=kind, t=ts: self._set_weight(d, k, t))
+        except Exception:
+            ts = now_str()
+            Clock.schedule_once(lambda *_, t=ts: self._set_weight('No Comm', 'nocomm', t))
         finally:
             self._busy = False
 
@@ -353,20 +368,24 @@ class WeightScreen(Screen):
         self.btn_get.background_color = C_BLUE
         self.btn_get.disabled = False
 
-    def _set_weight(self, val):
-        self.lbl_weight.text = val
-        self.lbl_weight.color = C_CYAN
-        self.lbl_weight.font_size = sp(62)
-
-    def _set_weight_err(self):
-        self.lbl_weight.text = 'Error'
-        self.lbl_weight.color = hex_c('#f87171')
-        self.lbl_weight.font_size = sp(36)
-
-    def _set_status(self, msg, color=None):
-        self.lbl_status.text = msg
-        if color is not None:
-            self.lbl_status.color = color
+    def _set_weight(self, val, kind='normal', ts=''):
+        colors = {
+            'normal':  C_CYAN,
+            'over':    hex_c('#f97316'),
+            'under':   hex_c('#f59e0b'),
+            'nocomm':  hex_c('#f87171'),
+        }
+        sizes = {
+            'normal': sp(62),
+            'over':   sp(52),
+            'under':  sp(52),
+            'nocomm': sp(40),
+        }
+        self.lbl_weight.text      = val
+        self.lbl_weight.color     = colors.get(kind, C_CYAN)
+        self.lbl_weight.font_size = sizes.get(kind, sp(52))
+        self.lbl_status.text      = ts
+        self.lbl_status.color     = hex_c('#64748b')
 
 # ── Settings screen ───────────────────────────────────────────────────────────
 class SettingsScreen(Screen):
