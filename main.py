@@ -298,6 +298,16 @@ class WeightScreen(Screen):
 
         root.add_widget(btn_grid)
         root.add_widget(Widget())
+
+        # Footer
+        footer = BoxLayout(orientation='vertical', size_hint=(1, None),
+                           height=dp(72), spacing=dp(1))
+        for line in ['Ver: 1.0', 'Shekel Scale 2008 LTD',
+                     'Tel: 04-6629100', 'Itzik Zrihan']:
+            footer.add_widget(make_lbl(line, size=sp(10),
+                                       color=hex_c('#94a3b8'), halign='center',
+                                       height=dp(16)))
+        root.add_widget(footer)
         self.add_widget(root)
 
     def on_enter(self):
@@ -494,7 +504,8 @@ class SettingsScreen(Screen):
         mode = 'auto' if self.btn_auto.state == 'down' else 'manual'
         try:
             save_cfg({'ip': ip, 'port': port, 'mode': mode, 'interval': interval})
-            self._result('Saved!', hex_c('#22c55e'))
+            # Navigate back to weight screen
+            self.manager.current = 'weight'
         except Exception as e:
             self._result('Save error: ' + str(e)[:30], hex_c('#ef4444'))
 
