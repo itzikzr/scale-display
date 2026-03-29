@@ -13,53 +13,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install system dependencies
+      - name: Build APK (Docker)
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y \
-            git zip unzip \
-            openjdk-17-jdk \
-            autoconf libtool pkg-config \
-            zlib1g-dev libncurses5-dev libncursesw5-dev \
-            libtinfo5 cmake libffi-dev libssl-dev \
-            ccache
-
-      - name: Install Buildozer + Cython
-        run: pip install buildozer cython
-
-      - name: Cache Buildozer global dir
-        uses: actions/cache@v4
-        with:
-          path: ~/.buildozer
-          key: buildozer-${{ hashFiles('buildozer.spec') }}
-          restore-keys: buildozer-
-
-      - name: Build APK
-        run: buildozer android debug 2>&1 | tee buildozer_full.log; exit ${PIPESTATUS[0]}
-
-      - name: Upload build log (always)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: buildozer_full.log
-          retention-days: 7
-
-      - name: Find APK
-        if: always()
-        run: find . -name "*.apk" 2>/dev/null || echo "No APK found"
+          docker run --rm \
+            -v $(pwd):/home/user/hostcwd \
+            kivy/buildozer:latest \
+            android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ScaleDisplay-APK
-          path: |
-            bin/*.apk
-            .buildozer/**/*.apk
-          if-no-files-found: warn
+          path: bin/*.apk
+          if-no-files-found: error
           retention-days: 30
