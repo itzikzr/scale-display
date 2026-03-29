@@ -7,12 +7,8 @@ import socket
 import threading
 import time
 
-import kivy
-kivy.require('2.3.0')
-
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.core.window import Window
 from kivy.metrics import dp, sp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -24,8 +20,6 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.widget import Widget
 from kivy.utils import get_color_from_hex as hex_c
 from kivy.graphics import Color, Rectangle, RoundedRectangle
-
-Window.clearcolor = hex_c('#f0f4f8')
 
 # ─── Palette ──────────────────────────────────────────────────────────────────
 NAV_BG    = hex_c('#1a2332')
@@ -94,11 +88,11 @@ def scale_cmd(ip, port, cmd, timeout=5):
             return 'ok'
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
-def make_btn(text, bg, on_press, size_hint=(1, None), height=dp(54)):
+def make_btn(text, bg, on_press, size_hint=(1, None), height=None):
     btn = Button(
         text=text,
         size_hint=size_hint,
-        height=height,
+        height=height or dp(54),
         background_normal='',
         background_color=bg,
         color=C_WHITE,
@@ -108,7 +102,9 @@ def make_btn(text, bg, on_press, size_hint=(1, None), height=dp(54)):
     btn.bind(on_press=on_press)
     return btn
 
-def make_label(text, size=sp(14), color=C_TEXT, bold=False, halign='right'):
+def make_label(text, size=None, color=None, bold=False, halign='right'):
+    color = color or C_TEXT
+    size = size or sp(14)
     lbl = Label(
         text=text,
         font_size=size,
@@ -480,6 +476,8 @@ class SettingsScreen(Screen):
 # ─── App ──────────────────────────────────────────────────────────────────────
 class ScaleApp(App):
     def build(self):
+        from kivy.core.window import Window
+        Window.clearcolor = hex_c('#f0f4f8')
         self.title = 'Shekel Weight Display'
 
         sm = ScreenManager(transition=NoTransition())
