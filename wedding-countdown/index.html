@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#f4e4d7">
+<title>ספירה לאחורה לחתונה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#c9a267;
+    --gold-light:#e6d2b5;
+    --blush:#f4e4d7;
+    --blush-2:#efd9c8;
+    --ink:#4a3a2c;
+    --card:#fffaf3;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+  }
+  body{
+    font-family:'Heebo', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 20% 15%, #fff6ea 0%, transparent 45%),
+      radial-gradient(circle at 85% 80%, #f3ded0 0%, transparent 50%),
+      linear-gradient(160deg, #fbf1e6 0%, #f4e0cf 45%, #ecd2ba 100%);
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: calc(24px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* decorative floating hearts */
+  .hearts{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+  }
+  .hearts span{
+    position:absolute;
+    bottom:-10%;
+    font-size:1.4rem;
+    color:var(--gold);
+    opacity:.35;
+    animation:float linear infinite;
+  }
+  @keyframes float{
+    to{ transform:translateY(-115vh) rotate(20deg); opacity:0; }
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:520px;
+    text-align:center;
+  }
+
+  .ornament{
+    font-size:1.6rem;
+    color:var(--gold);
+    letter-spacing:.3em;
+    margin-bottom:6px;
+  }
+
+  .kicker{
+    font-size:.9rem;
+    letter-spacing:.25em;
+    color:#a98a5f;
+    text-transform:uppercase;
+    margin:0 0 10px;
+  }
+
+  .names{
+    font-family:'Frank Ruhl Libre', serif;
+    font-weight:700;
+    font-size:clamp(2.1rem, 8vw, 3.4rem);
+    line-height:1.15;
+    margin:0 0 6px;
+    color:#5a4632;
+  }
+
+  .amp{
+    display:inline-block;
+    font-family:'Frank Ruhl Libre', serif;
+    font-style:italic;
+    color:var(--gold);
+    margin:0 .25em;
+    font-size:.85em;
+  }
+
+  .date-line{
+    font-size:1.05rem;
+    color:var(--ink);
+    margin:4px 0 28px;
+    letter-spacing:.03em;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid rgba(201,162,103,.35);
+    border-radius:22px;
+    box-shadow:0 20px 45px -20px rgba(90,60,20,.35), 0 2px 8px rgba(90,60,20,.08);
+    padding:26px 18px 30px;
+  }
+
+  .countdown{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:10px;
+  }
+
+  .unit{
+    background:linear-gradient(160deg, #ffffff, var(--blush));
+    border-radius:16px;
+    padding:14px 4px 12px;
+    border:1px solid rgba(201,162,103,.25);
+  }
+
+  .unit .num{
+    font-family:'Frank Ruhl Libre', serif;
+    font-weight:900;
+    font-size:clamp(1.8rem, 7vw, 2.6rem);
+    color:#7a5a34;
+    line-height:1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .unit .lbl{
+    margin-top:6px;
+    font-size:.72rem;
+    letter-spacing:.08em;
+    color:#a98a5f;
+  }
+
+  .sep{
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin:24px 0 18px;
+    opacity:.6;
+  }
+
+  .message{
+    font-size:1rem;
+    line-height:1.7;
+    color:#6b5a45;
+  }
+
+  .day-badge{
+    display:inline-block;
+    margin-top:18px;
+    padding:8px 18px;
+    border-radius:999px;
+    background:var(--blush-2);
+    border:1px solid rgba(201,162,103,.4);
+    font-size:.9rem;
+    color:#8a6a3f;
+  }
+
+  footer{
+    margin-top:22px;
+    font-size:.75rem;
+    color:#b39a72;
+    letter-spacing:.05em;
+  }
+
+  .over .card{ animation:pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 20px 45px -20px rgba(90,60,20,.35), 0 2px 8px rgba(90,60,20,.08); }
+    50%{ box-shadow:0 24px 60px -18px rgba(201,162,103,.55), 0 2px 8px rgba(90,60,20,.08); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="wrap" id="wrap">
+  <div class="ornament">✦ ✦ ✦</div>
+  <p class="kicker">היום המיוחד שלנו מתקרב</p>
+  <h1 class="names" id="names">שם הכלה <span class="amp">&amp;</span> שם החתן</h1>
+  <p class="date-line" id="dateLine"></p>
+
+  <div class="card">
+    <div class="countdown">
+      <div class="unit"><div class="num" id="days">00</div><div class="lbl">ימים</div></div>
+      <div class="unit"><div class="num" id="hours">00</div><div class="lbl">שעות</div></div>
+      <div class="unit"><div class="num" id="minutes">00</div><div class="lbl">דקות</div></div>
+      <div class="unit"><div class="num" id="seconds">00</div><div class="lbl">שניות</div></div>
+    </div>
+
+    <div class="sep"></div>
+
+    <p class="message" id="message">עד שנתחתן ונתחיל את הפרק הכי יפה שלנו ❤</p>
+
+    <div class="day-badge" id="badge"></div>
+  </div>
+
+  <footer>נבנה באהבה, לקראת ה-15.4.2027 💛</footer>
+</div>
+
+<script>
+  // ── עריכה קלה: כאן משנים תאריך, שמות וטקסט ──────────────────────────
+  const CONFIG = {
+    weddingDate: '2027-04-15T18:00:00', // תאריך ושעת החופה
+    brideName: 'שם הכלה',
+    groomName: 'שם החתן',
+    message: 'עד שנתחתן ונתחיל את הפרק הכי יפה שלנו ❤',
+    overMessage: 'החתונה שלנו כבר כאן! 🎉'
+  };
+  // ──────────────────────────────────────────────────────────────────
+
+  document.getElementById('names').innerHTML =
+    CONFIG.brideName + ' <span class="amp">&amp;</span> ' + CONFIG.groomName;
+  document.getElementById('message').textContent = CONFIG.message;
+
+  const target = new Date(CONFIG.weddingDate);
+
+  const heDate = target.toLocaleDateString('he-IL', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+  document.getElementById('dateLine').textContent = heDate;
+
+  const elDays = document.getElementById('days');
+  const elHours = document.getElementById('hours');
+  const elMinutes = document.getElementById('minutes');
+  const elSeconds = document.getElementById('seconds');
+  const badge = document.getElementById('badge');
+  const wrap = document.getElementById('wrap');
+  const pad = n => String(n).padStart(2, '0');
+
+  function tick() {
+    const now = new Date();
+    let diff = target - now;
+
+    if (diff <= 0) {
+      elDays.textContent = '00';
+      elHours.textContent = '00';
+      elMinutes.textContent = '00';
+      elSeconds.textContent = '00';
+      badge.textContent = CONFIG.overMessage;
+      wrap.classList.add('over');
+      return;
+    }
+
+    const s = Math.floor(diff / 1000);
+    const days = Math.floor(s / 86400);
+    const hours = Math.floor((s % 86400) / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const seconds = s % 60;
+
+    elDays.textContent = pad(days);
+    elHours.textContent = pad(hours);
+    elMinutes.textContent = pad(minutes);
+    elSeconds.textContent = pad(seconds);
+    badge.textContent = days + ' ימים עד ליום הגדול 💍';
+  }
+
+  tick();
+  setInterval(tick, 1000);
+
+  // hearts background animation
+  const heartsWrap = document.getElementById('hearts');
+  const symbols = ['♥','✦','❀'];
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement('span');
+    s.textContent = symbols[i % symbols.length];
+    s.style.left = Math.random() * 100 + '%';
+    s.style.fontSize = (0.9 + Math.random() * 1.2) + 'rem';
+    s.style.animationDuration = (10 + Math.random() * 14) + 's';
+    s.style.animationDelay = (Math.random() * 14) + 's';
+    heartsWrap.appendChild(s);
+  }
+</script>
+</body>
+</html>
