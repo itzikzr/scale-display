@@ -119,8 +119,8 @@
 
   .countdown{
     display:grid;
-    grid-template-columns:repeat(5, 1fr);
-    gap:8px;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
   }
 
   .unit{
@@ -133,7 +133,7 @@
   .unit .num{
     font-family:Georgia, 'Times New Roman', serif;
     font-weight:900;
-    font-size:clamp(1.3rem, 5.6vw, 2.3rem);
+    font-size:clamp(1.7rem, 7vw, 2.6rem);
     color:#7a5a34;
     line-height:1;
     font-variant-numeric: tabular-nums;
@@ -199,8 +199,6 @@
       <div class="unit"><div class="num" id="months">09</div><div class="lbl">חודשים</div></div>
       <div class="unit"><div class="num" id="days">03</div><div class="lbl">ימים</div></div>
       <div class="unit"><div class="num" id="hours">00</div><div class="lbl">שעות</div></div>
-      <div class="unit"><div class="num" id="minutes">00</div><div class="lbl">דקות</div></div>
-      <div class="unit"><div class="num" id="seconds">00</div><div class="lbl">שניות</div></div>
     </div>
 
     <div class="sep"></div>
@@ -238,8 +236,6 @@
   const elMonths = document.getElementById('months');
   const elDays = document.getElementById('days');
   const elHours = document.getElementById('hours');
-  const elMinutes = document.getElementById('minutes');
-  const elSeconds = document.getElementById('seconds');
   const badge = document.getElementById('badge');
   const wrap = document.getElementById('wrap');
   const pad = n => String(n).padStart(2, '0');
@@ -266,31 +262,24 @@
       elMonths.textContent = '00';
       elDays.textContent = '00';
       elHours.textContent = '00';
-      elMinutes.textContent = '00';
-      elSeconds.textContent = '00';
       badge.textContent = CONFIG.overMessage;
       wrap.classList.add('over');
       return;
     }
 
     const { months, days, restMs } = monthsAndDays(now, target);
-    const s = Math.floor(restMs / 1000);
-    const hours = Math.floor(s / 3600);
-    const minutes = Math.floor((s % 3600) / 60);
-    const seconds = s % 60;
+    const hours = Math.floor(restMs / 3600000);
 
     const totalDays = Math.floor(diff / 86400000);
 
     elMonths.textContent = pad(months);
     elDays.textContent = pad(days);
     elHours.textContent = pad(hours);
-    elMinutes.textContent = pad(minutes);
-    elSeconds.textContent = pad(seconds);
     badge.textContent = totalDays + ' ימים עד ליום הגדול 💍';
   }
 
   tick();
-  setInterval(tick, 1000);
+  setInterval(tick, 30000);
 
   // hearts background animation
   const heartsWrap = document.getElementById('hearts');
